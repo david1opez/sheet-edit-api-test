@@ -42,6 +42,8 @@ app.get('/projects', async (req, res) => {
 
 app.post('/sheetToDb', async (req, res) => {
   try {
+    console.log('Received request:', req.body);
+    
     const { rows, columnNames, values } = req.body;
     if (!rows || !columnNames || !values) {
       return res.status(400).json({ error: 'Invalid request payload' });
