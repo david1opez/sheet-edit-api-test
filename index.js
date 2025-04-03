@@ -43,7 +43,7 @@ app.get('/projects', async (req, res) => {
 app.post('/sheetToDb', async (req, res) => {
   try {
     console.log('Received request:', req.body);
-    
+
     const { rows, columnNames, values } = req.body;
     if (!rows || !columnNames || !values) {
       return res.status(400).json({ error: 'Invalid request payload' });
@@ -79,7 +79,7 @@ app.post('/sheetToDb', async (req, res) => {
     rowNumbers.forEach((rowNumber, index) => {
       if (!foundRows.has(rowNumber)) {
         const newRowData = values[index].reduce((acc, val, idx) => {
-          acc[columnNames[idx]] = val;
+          acc[sanitizedColumnNames[idx]] = val;
           return acc;
         }, {});
         newRowData.row = rowNumber;
