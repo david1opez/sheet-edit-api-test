@@ -52,12 +52,19 @@ app.post('/sheetToDb', async (req, res) => {
     const q = query(collectionRef, where('row', 'in', rowNumbers));
     const querySnapshot = await getDocs(q);
 
+    const sanitizedColumnNames = columnNames.map(name =>
+      name
+        .toLowerCase()
+        .replace(/\s+/g, '_')
+        .replace(/[^\w]/g, '')
+    );
+
     const foundRows = new Set();
     const batch = writeBatch(db);
     querySnapshot.forEach((document) => {
       foundRows.add(document.data().row);
       const rowData = values[rowNumbers.indexOf(document.data().row)].reduce((acc, val, idx) => {
-        acc[columnNames[idx]] = val;
+        acc[sanitizedColumnNames[idx]] = val;
         return acc;
       }, {});
       batch.set(doc(db, 'Proyectos', document.id), rowData, { merge: true });
