@@ -56,6 +56,10 @@ app.post('/sheetToDb', async (req, res) => {
       name
         .toLowerCase()
         .replace(/\s+/g, '_')
+        .replace(/[áéíóú]/g, match => {
+          const replacements = { 'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u' };
+          return replacements[match];
+        })
         .replace(/[^\w]/g, '')
     );
 
